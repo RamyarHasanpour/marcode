@@ -271,7 +271,10 @@ class App(CTk):
                 value.configure(fg_color="#242938")
         for i in self.AyaInFixMishe:
             i.destroy()
+        for kelid,kigin in selectDarss.items():
+            kigin.destroy()
         self.AyaInFixMishe.clear()
+        selectDarss.clear()
         self.getbededarsaro = None 
         for darskey,valuekey in tables["DarsHa"].items():
             if valuekey["name"][self.current_lang] == text:
