@@ -45,7 +45,7 @@ def find_all_fonts(system_fonts, font_list):
 
 MotaghayereBTN = {}
 text = isDB()
-
+selectDarss = {}
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -281,11 +281,16 @@ class App(CTk):
             if "Lessons" in self.getbededarsaro:
                 for lsseon in self.getbededarsaro["Lessons"].values():
                     title_text = lsseon["Title"][self.current_lang]
-                    self.sdas = CTkButton(self.frame_chap,width=200,height=20,fg_color="transparent",hover_color="#2c3448",text_color="#d6d9e0",font=self.fontsmall,text=title_text,command=lambda events=lsseon:self.SelectDars(events))
+                    self.sdas = CTkButton(self.frame_chap,width=200,height=20,fg_color="transparent",hover_color="#2c3448",text_color="#d6d9e0",font=self.fontsmall,text=title_text,command=lambda events=lsseon,btnname=title_text:self.SelectDars(events,btnname))
                     self.sdas.pack(anchor="center",pady=10)
                     self.AyaInFixMishe.append(self.sdas)
-
-    def SelectDars(self,text):
+                    selectDarss[title_text] = self.sdas
+    def SelectDars(self,text,btnname):
+        for idish,key in selectDarss.items():
+            if idish == btnname:
+                key.configure(text_color="#3a6ff0")
+            else:
+                key.configure(text_color="#d6d9e0")
         self.chaleng_active = text["challenge"]
         self.idDarsIn = text["id"]
         self.titletext.configure(text=text["Title"][self.current_lang])
