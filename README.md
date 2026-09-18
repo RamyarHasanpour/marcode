@@ -1,5 +1,3 @@
-<img width="1614" height="966" alt="Screenshot 2026-09-18 220012" src="https://github.com/user-attachments/assets/2371af4a-29de-4734-8219-1786165b7546" /><div align="center">
-
 # MarCode
 
 An interactive desktop app for learning Python, with lessons, a built-in code editor and challenges.
