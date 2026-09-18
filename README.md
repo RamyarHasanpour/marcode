@@ -1,4 +1,4 @@
-<div align="center">
+<img width="1614" height="966" alt="Screenshot 2026-09-18 220012" src="https://github.com/user-attachments/assets/2371af4a-29de-4734-8219-1786165b7546" /><div align="center">
 
 # MarCode
 
@@ -6,6 +6,8 @@ An interactive desktop app for learning Python, with lessons, a built-in code ed
 
 [English](#english) · [کوردی](#کوردی) · [فارسی](#فارسی)
 
+<br>
+<img src="https://github.com/user-attachments/assets/4befb724-2d16-4601-ac2e-9f2ee10d29bb" alt="محیط برنامه مارکد" width="700">
 </div>
 
 ---
