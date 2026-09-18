@@ -7,7 +7,7 @@ An interactive desktop app for learning Python, with lessons, a built-in code ed
 [English](#english) · [کوردی](#کوردی) · [فارسی](#فارسی)
 
 <br>
-<img src="https://github.com/user-attachments/assets/4befb724-2d16-4601-ac2e-9f2ee10d29bb" alt="محیط برنامه مارکد" width="700">
+<img src="https://github.com/user-attachments/assets/4befb724-2d16-4601-ac2e-9f2ee10d29bb" alt="MarCodeBG" width="700">
 </div>
 
 ---
