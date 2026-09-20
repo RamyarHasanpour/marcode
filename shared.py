@@ -1,7 +1,24 @@
+"""
+MarCode Shared Configuration and Utilities Module
+-------------------------------------------------
+This module acts as the central data repository for the MarCode application.
+It contains the multi-language user interface text, syntax highlighting themes,
+interactive course structures, and system directory utilities.
+
+Author: Ramyar Hasanpour
+Project: MarCode - Interactive Python Learning Sandbox
+Repository: https://github.com/RamyarHasanpour/marcode
+"""
+
 import os
 
+# The 'tables' dictionary contains all static and dynamic data for the application.
+# It acts as a local database for UI configurations, themes, and learning paths.
 tables = {
+    # List of possible drive letters to search for or create the local database directory.
     "isFileHere": ["D", "E", "F", "G", "H", "I", "J", "K", "C"],
+    
+    # UI Texts mapped by their respective languages (English, Persian, Kurdish).
     "ui_texts": {
         "YourScore": {"English": "Your Score", "فارسی": "امتیاز شما", "کوردی": "خاڵی تۆ"},
         "LearningPaths": {"English": "Learning Paths", "فارسی": "مسیر های آموزشی", "کوردی": "ڕێڕەوەکانی فێربوون"},
@@ -23,6 +40,8 @@ tables = {
             "کوردی": "مارکۆد (MarCode)\nژینگەیەکی کارلێککارانە بۆ فێربوونی پایتۆن.\n\n دیزاین و گەشەپێدان لەلایەن: ڕامیار حەسەن‌پوور\n\nکۆگای گیت‌هابی پڕۆژەکە:\nhttps://github.com/RamyarHasanpour/marcode"
         }
     },
+    
+    # UI configuration, including button colors, hover states, and syntax highlighting hex codes.
     "ConfigUi": {
         "ColorBTNZirEdtcode": {
             "0": "#3a6ff0",
@@ -61,6 +80,7 @@ tables = {
                 "4": "Ctrl+z",
             }
         },
+        # Comprehensive mapping of Python keywords and built-in functions to hex color codes for the code editor syntax highlighter.
         "PyKeywordsColor": {
             "return": "#c586c0",
             "if": "#c586c0",
@@ -710,6 +730,8 @@ tables = {
             "namedtuple": "#4ec9b0"
         }
     },
+    
+    # Content map for all courses, modules, lessons, and interactive challenges.
     "DarsHa": {
         "Dars1": {
             "name": {"English": "Getting Started", "فارسی": "شروع کار", "کوردی": "دەستپێکردن"},
@@ -982,23 +1004,50 @@ tables = {
 }
 
 def isDB():
+    """
+    Checks the system's available drives to locate the MarCode project database directory.
+    If the directory does not exist, it triggers the creation function.
+    
+    Returns:
+        str: The path to the verified database directory.
+    """
     for i in tables["isFileHere"]:
         if os.path.exists(f"{i}:/MarcodeProject"):
             return f"{i}:/MarcodeProject/"
+            
+    # Fallback to creating the database directory if not found on any drive
     return createDB()
 
 def createDB():
+    """
+    Iterates through standard Windows drive letters to create the required 
+    'MarcodeProject' local database directory on the first accessible drive.
+    
+    Returns:
+        str: The path to the newly created database directory, or 'ErrorFile' if failed.
+    """
     for i in tables["isFileHere"]:
         try:
             os.mkdir(f"{i}:/MarcodeProject")
             return f"{i}:/MarcodeProject/"
         except:
+            # Silently pass exceptions (e.g., PermissionError or FileNotFoundError) 
+            # to continue checking the next available drive.
             pass
+            
     return "ErrorFile"
 
 def getMaxScore():
+    """
+    Dynamically calculates the total maximum score achievable in the application.
+    It iterates over all modules (DarsHa) and counts the total number of lessons available.
+    
+    Returns:
+        int: Total number of lessons (representing the maximum score limit).
+    """
     totalscore = 0
     for i in tables["DarsHa"].values():
         if "Lessons" in i:
             totalscore += len(i["Lessons"])
+            
     return totalscore or 0
