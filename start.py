@@ -412,7 +412,7 @@ class App(CTk):
                 for key, val in fontstylelist.items():
                     file.write(f"{key} | {val[0]}\n")
                 self.code = (self.font_family, int(fontstylelist["FontCodeSize"][0]))
-                self.code_x2 = (self.font_family, int(fontstylelist["FontCodeSizeX2"][0]))
+                self.code_x2 = (self.font_family, int(fontstylelist["FontCodeSizex2"][0]))
                 self.fontsmall = (self.font_family, int(fontstylelist["FontSmall"][0]))
                 self.apply_fonts()
         except:
