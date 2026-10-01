@@ -101,10 +101,17 @@ class App(CTk):
         self.box = CTkComboBox(master=self.frame_aval, values=["English", "فارسی", "کوردی"], command=self.change_language, width=130, height=32, corner_radius=6, fg_color="#242938", border_width=0, border_color="dark_color", button_color="#1b1f2b", button_hover_color="#3a6ff0", text_color="white", dropdown_fg_color="#242938", dropdown_hover_color="#3a6ff0", dropdown_text_color="white", font=self.code, dropdown_font=self.code, justify=CENTER, state="readonly")
         self.box.set(self.current_lang)
         self.box.pack(side=RIGHT, anchor="center", padx=(0, 10))
-        
-        self.emtiaz_label = CTkLabel(self.frame_aval, text=f"{tables['ui_texts']['YourScore'][self.current_lang]}: 0/{self.totalScore}", font=self.code)
-        self.emtiaz_label.pack(side=RIGHT, anchor="center", padx=100)
-        
+
+        self.prograse = CTkFrame(self.frame_aval,width=200,fg_color="transparent")
+        self.prograse.pack(side=RIGHT,fill="y", anchor="center",padx=100)
+        self.prograse.propagate(False)
+
+        self.emtiaz_label = CTkLabel(self.prograse, text=f"{tables['ui_texts']['YourScore'][self.current_lang]}: 0/{self.totalScore}", font=self.code)
+        self.emtiaz_label.pack(side=TOP, anchor="center",pady=5)
+
+        self.prograse_org = CTkProgressBar(self.prograse,120,progress_color="#3a6ff0")
+        self.prograse_org.pack(side=BOTTOM, anchor="center",pady=8)
+        self.prograse_org.set(0)
         self.marcode = CTkLabel(master=self.frame_aval, text="MarCode", font=self.code)
         self.marcode.place(relx=0.5, rely=0.5, anchor="center")
         
@@ -304,7 +311,8 @@ class App(CTk):
                     score += int(motaghayer)
         if hasattr(self, 'emtiaz_label'):
             self.emtiaz_label.configure(text=f"{tables['ui_texts']['YourScore'][self.current_lang]}: {score}/{self.totalScore}")
-
+            self.results = score / self.totalScore
+            self.prograse_org.set(self.results)
     def setDbAccept(self, text2):
         with open(f"{text}marcodedb.txt","a", encoding="utf-8") as file:
             file.write(f"\n{text2} | 1")
@@ -336,8 +344,8 @@ class App(CTk):
             code_ok = all(alamfix in usercode for alamfix in req)
             database = self.getDbAccept()
             miq = self.chaleng_active.get("output","")
-            MotghayerAval = str(self.satlport).strip()
-            MotghayerDovom = str(miq).strip()
+            MotghayerAval = str(self.satlport).strip().lower()
+            MotghayerDovom = str(miq).strip().lower()
             Mootaghayayare = False
             for i in database:
                 if self.idDarsIn in i:
