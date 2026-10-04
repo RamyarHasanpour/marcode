@@ -11,7 +11,6 @@ set_appearance_mode("dark")
 import os
 import shared
 import sys
-
 FONT_CANDIDATES = [
     "Rabar", "Rabar_004", "Rabar_005", "Unikurd", "Rudaw", "Hawar", "Kurdi", 
     "Noto Kufi Arabic", "Scheherazade New", "Amiri", "Lateef", "Noto Sans Arabic", "Noto Naskh Arabic",
@@ -33,7 +32,7 @@ FONT_CANDIDATES = [
     "Black Ops One", "League Spartan", "Russo One", "Audiowide", "Orbitron", 
     "Rajdhani", "Michroma", "Cinzel",
     "Pacifico", "Lobster", "Dancing Script", "Great Vibes", "Sacramento", "Allura",
-    "Satisfy", "Caveat", "Permanent Marker", "Indie Flower","Arial"
+    "Satisfy", "Caveat", "Permanent Marker", "Indie Flower","Rabar_013","Roboto Black","Arial"
 ]
 MotaghayereBTN = {}
 text = isDB()
@@ -367,6 +366,7 @@ class App(CTk):
             try:
                 self.texteditor.delete("1.0","end")
                 self.texteditor.insert("1.0",self.code_cntlz)
+                self.keyframe()
                 self.ouytput.configure(text_color=tables["ConfigUi"]["ColorBTNZirEdtcode"][g],text=tables["ui_texts"]["Reverted"][self.current_lang])
             except:
                 self.ouytput.configure(text_color=tables["ConfigUi"]["ColorBTNZirEdtcode"][g],text=tables["ui_texts"]["SelectLesson"][self.current_lang])
