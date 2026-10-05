@@ -502,6 +502,7 @@ class App(CTk):
         self.satlport = ""
 
     def createDataDB(self,vales):
+            os.makedirs(f"{text}/FontStyle",exist_ok=True)
             with open(f"{text}marcodedb.txt","w", encoding="utf-8") as file:
                 file.write("Language | English\n")
             with open(f"{text}/FontStyle/setting.txt","w", encoding="utf-8") as file:
