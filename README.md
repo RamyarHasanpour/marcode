@@ -1,13 +1,12 @@
 # MarCode
 
-An interactive desktop app for learning Python, with lessons, a built-in code editor and challenges.
+An interactive desktop app for learning Python, with lessons, a built-in code editor, challenges, and local network chat.
 
 [English](#english) · [کوردی](#کوردی) · [فارسی](#فارسی)
 
-
 <br>
-<img width="1616" height="1002" alt="image" src="https://github.com/user-attachments/assets/28d66011-4228-432d-a02f-ffeb18f5e31c" />
-</div>
+
+<img width="1616" height="1002" alt="MarCode screenshot" src="https://github.com/user-attachments/assets/28d66011-4228-432d-a02f-ffeb18f5e31c" />
 
 ---
 
@@ -17,7 +16,7 @@ MarCode is a desktop application for learning Python from scratch. Each lesson c
 
 ### Purpose
 
-MarCode was built with a simple goal: to make learning Python approachable and practical. It is meant for two kinds of people: teachers and mentors who want a ready-made tool for teaching Python, and self-learners who want to study at their own pace.
+MarCode was built with a simple goal: to make learning Python approachable and practical. It is meant for two kinds of people: teachers and mentors who want a ready-made tool for teaching Python in classrooms, and self-learners who want to study at their own pace.
 
 ### Customizing the lessons
 
@@ -27,9 +26,11 @@ All lesson content lives in a single file, `shared.py`. Titles, explanations, ex
 
 - Built-in code editor with syntax highlighting
 - Run your code and see the output right inside the app
-- One challenge per lesson, checked automatically, with a score that adds up as you go
-- Your progress and language choice are saved between sessions
-- Interface available in English, Persian and Kurdish (Sorani)
+- One challenge per lesson, checked automatically, with a score and visual progress bar
+- **LAN Talk (Local Network Chat):** built-in chat room for classrooms and labs. Users on the same network can talk to each other automatically, without setting up IP addresses
+- Customizable font family and font sizes from the settings menu
+- Seamless language switching between English, Persian and Kurdish (Sorani) without restarting
+- Your progress, font settings and language choice are saved between sessions
 - Dark interface built with CustomTkinter
 
 ### Lessons
@@ -47,10 +48,16 @@ All lesson content lives in a single file, `shared.py`. Titles, explanations, ex
 ### Requirements
 
 - Windows
-- Python 3.8 or newer
-- customtkinter
+- Python 3.8 or newer (only if running from source)
+- `customtkinter`
 
 ### Installation
+
+**Option 1: Installer (recommended)**
+
+Download and run `MarCode_Setup.exe` from the [Releases](https://github.com/RamyarHasanpour/marcode/releases) page. No Python installation is required.
+
+**Option 2: Run from source**
 
 ```bash
 git clone https://github.com/RamyarHasanpour/marcode.git
@@ -59,12 +66,15 @@ pip install customtkinter
 python start.py
 ```
 
-On the first launch, the app creates a folder named `MarcodeProject` on one of your drives and stores your progress there.
+On the first launch, the app creates a folder named `MarcodeProject` on one of your drives and stores your progress and font settings there.
 
 ### Project structure
 
-- `start.py` - the app window, the code editor and challenge checking
-- `shared.py` - lesson content, translations and interface settings
+| File | Description |
+| --- | --- |
+| `start.py` | The app window, code editor, challenge checking, font settings and LAN chat (UDP/TCP sockets) |
+| `shared.py` | Lesson content, translations and interface settings |
+| `M_Logo.ico` | Application icon |
 
 ---
 
@@ -76,7 +86,7 @@ On the first launch, the app creates a folder named `MarcodeProject` on one of y
 
 ### ئامانج
 
-مارکۆد بە ئامانجێکی سادە دروستکراوە: ئاسان و کارامەکردنی فێربوونی پایتۆن. بۆ دوو جۆر کەس گونجاوە: مامۆستا و ڕێنمایکارەکان کە ئامرازێکی ئامادەیان پێویستە بۆ فێرکردنی پایتۆن، و ئەوانەی دەیانەوێت بە خۆیان و بە خێرایی خۆیان پایتۆن فێر ببن.
+مارکۆد بە ئامانجێکی سادە دروستکراوە: ئاسان و کارامەکردنی فێربوونی پایتۆن. بۆ دوو جۆر کەس گونجاوە: مامۆستا و ڕێنمایکارەکان کە ئامرازێکی ئامادەیان پێویستە بۆ فێرکردنی پایتۆن لە پۆلدا، و ئەوانەی دەیانەوێت بە خۆیان و بە خێرایی خۆیان پایتۆن فێر ببن.
 
 ### گۆڕینی وانەکان
 
@@ -86,9 +96,11 @@ On the first launch, the app creates a folder named `MarcodeProject` on one of y
 
 - ئیدیتۆری کۆدی ناوخۆیی لەگەڵ ڕەنگکردنی وشە سەرەکییەکانی پایتۆن
 - جێبەجێکردنی کۆد و پیشاندانی دەرەنجام لەناو خودی بەرنامەکە
-- ئاڵنگارییەک بۆ هەر وانەیەک کە بە شێوەی خۆکار دەپشکنرێت و خاڵەکانت زیاد دەکات
-- هەڵگرتنی پێشکەوتن و زمانی هەڵبژێردراو لە نێوان جارەکانی کارپێکردندا
-- ڕووکاری بەرنامەکە بە سێ زمان: ئینگلیزی، فارسی و کوردی
+- ئاڵنگارییەک بۆ هەر وانەیەک کە بە شێوەی خۆکار دەپشکنرێت لەگەڵ نیشاندەری پێشکەوتن (Progress Bar)
+- **گفتوگۆی تۆڕی ناوخۆیی (LAN Talk):** بەشی چاتی ناوخۆیی بۆ پۆل و تاقیگەکان؛ بەکارهێنەرانی سەر هەمان تۆڕ دەتوانن بەبێ ڕێکخستنی IP ڕاستەوخۆ پەیام بۆ یەکتر بنێرن
+- بەشی ڕێکخستنەکان (Settings) بۆ گۆڕینی جۆری فۆنت و قەبارەی نووسینەکان
+- گۆڕینی ڕاستەوخۆی زمانی بەرنامەکە لە نێوان ئینگلیزی، فارسی و کوردی بەبێ داخستنەوەی بەرنامە
+- هەڵگرتنی پێشکەوتن، ڕێکخستنی فۆنت و زمانی هەڵبژێردراو لە نێوان جارەکانی کارپێکردندا
 - ڕووکارێکی تاریک کە بە CustomTkinter دروستکراوە
 
 ### وانەکان
@@ -106,12 +118,16 @@ On the first launch, the app creates a folder named `MarcodeProject` on one of y
 ### پێداویستییەکان
 
 - ویندۆز
-- پایتۆنی ٣.٨ یان نوێتر
-- کتێبخانەی customtkinter
+- پایتۆنی ٣.٨ یان نوێتر (ئەگەر لە سۆرس کۆدەوە کاری پێدەکەیت)
+- کتێبخانەی `customtkinter`
 
 ### دابەزاندن و کارپێکردن
 
-</div>
+**ڕێگەی یەکەم: فایلی دامەزراندن (پێشنیارکراو)**
+
+فایلی `MarCode_Setup.exe` لە بەشی [Releases](https://github.com/RamyarHasanpour/marcode/releases) دابەزێنە و دایبمەزرێنە (پێویستی بە پایتۆن نییە).
+
+**ڕێگەی دووەم: لە ڕێگەی سۆرس کۆدەوە**
 
 ```bash
 git clone https://github.com/RamyarHasanpour/marcode.git
@@ -120,9 +136,7 @@ pip install customtkinter
 python start.py
 ```
 
-<div dir="rtl">
-
-لە یەکەم جار کارپێکردندا، بەرنامەکە فۆڵدەرێک بە ناوی `MarcodeProject` لەسەر یەکێک لە درایڤەکانت دروست دەکات و پێشکەوتنەکانت لەوێ هەڵدەگرێت.
+لە یەکەم جار کارپێکردندا، بەرنامەکە فۆڵدەرێک بە ناوی `MarcodeProject` لەسەر یەکێک لە درایڤەکانت دروست دەکات و پێشکەوتن و ڕێکخستنەکانت لەوێ هەڵدەگرێت.
 
 </div>
 
@@ -136,7 +150,7 @@ python start.py
 
 ### هدف پروژه
 
-مارکد با یک هدف ساده ساخته شده است: آسان و کاربردی کردن یادگیری پایتون. این برنامه برای دو گروه مناسب است: مدرس‌ها و مربی‌هایی که به ابزاری آماده برای آموزش پایتون نیاز دارند، و کسانی که می‌خواهند خودشان و با سرعت خودشان پایتون یاد بگیرند.
+مارکد با یک هدف ساده ساخته شده است: آسان و کاربردی کردن یادگیری پایتون. این برنامه برای دو گروه مناسب است: مدرس‌ها و مربی‌هایی که به ابزاری آماده برای آموزش پایتون در کلاس نیاز دارند، و کسانی که می‌خواهند خودشان و با سرعت خودشان پایتون یاد بگیرند.
 
 ### شخصی‌سازی درس‌ها
 
@@ -146,9 +160,11 @@ python start.py
 
 - ادیتور کد داخلی با رنگی شدن کلمات کلیدی پایتون
 - اجرای کد و نمایش خروجی داخل خود برنامه
-- یک چالش برای هر درس که به‌صورت خودکار بررسی می‌شود و امتیاز شما را بالا می‌برد
-- ذخیره پیشرفت و زبان انتخاب‌شده بین دفعات اجرا
-- رابط کاربری به سه زبان انگلیسی، فارسی و کوردی (سورانی)
+- یک چالش برای هر درس که به‌صورت خودکار بررسی می‌شود، همراه با نوار پیشرفت (Progress Bar)
+- **گفتگوی شبکه محلی (LAN Talk):** سیستم چت داخلی برای کلاس‌ها و کارگاه‌ها؛ کاربران متصل به یک شبکه می‌توانند بدون نیاز به تنظیم دستی IP، به‌طور خودکار با هم گفتگو کنند
+- منوی تنظیمات (Settings) برای تغییر نوع فونت و اندازه متن‌ها
+- تغییر آنی زبان برنامه بین انگلیسی، فارسی و کوردی (سورانی) بدون نیاز به بستن برنامه
+- ذخیره پیشرفت، تنظیمات فونت و زبان انتخاب‌شده بین دفعات اجرا
 - ظاهر تیره ساخته‌شده با CustomTkinter
 
 ### سرفصل‌ها
@@ -166,12 +182,16 @@ python start.py
 ### پیش‌نیازها
 
 - ویندوز
-- پایتون ۳.۸ یا جدیدتر
-- کتابخانه customtkinter
+- پایتون ۳.۸ یا جدیدتر (در صورت اجرا از روی سورس کد)
+- کتابخانه `customtkinter`
 
 ### نصب و اجرا
 
-</div>
+**روش اول: فایل نصبی (پیشنهادی)**
+
+فایل `MarCode_Setup.exe` را از بخش [Releases](https://github.com/RamyarHasanpour/marcode/releases) دانلود و نصب کنید (نیازی به نصب بودن پایتون نیست).
+
+**روش دوم: اجرا از روی سورس کد**
 
 ```bash
 git clone https://github.com/RamyarHasanpour/marcode.git
@@ -180,8 +200,6 @@ pip install customtkinter
 python start.py
 ```
 
-<div dir="rtl">
-
-در اولین اجرا، برنامه پوشه‌ای به نام `MarcodeProject` را روی یکی از درایوهای شما می‌سازد و پیشرفت شما را آنجا ذخیره می‌کند.
+در اولین اجرا، برنامه پوشه‌ای به نام `MarcodeProject` را روی یکی از درایوهای شما می‌سازد و پیشرفت و تنظیمات فونت شما را آنجا ذخیره می‌کند.
 
 </div>
