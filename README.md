@@ -4,8 +4,9 @@ An interactive desktop app for learning Python, with lessons, a built-in code ed
 
 [English](#english) · [کوردی](#کوردی) · [فارسی](#فارسی)
 
+
 <br>
-<img width="1919" height="1136" alt="Screenshot 2026-10-01 234621" src="https://github.com/user-attachments/assets/581365af-da55-415f-9afb-ec50b05bab29" />
+<img width="1616" height="1002" alt="image" src="https://github.com/user-attachments/assets/28d66011-4228-432d-a02f-ffeb18f5e31c" />
 </div>
 
 ---
