@@ -5,12 +5,16 @@ from shared import tables as tables
 from shared import isDB as isDB
 import re
 import io
-import tkinter
 from contextlib import redirect_stdout
-set_appearance_mode("dark")
 import os
 import shared
 import sys
+import getpass
+import socket
+import threading
+
+set_appearance_mode("dark")
+
 FONT_CANDIDATES = [
     "Rabar", "Rabar_004", "Rabar_005", "Unikurd", "Rudaw", "Hawar", "Kurdi", 
     "Noto Kufi Arabic", "Scheherazade New", "Amiri", "Lateef", "Noto Sans Arabic", "Noto Naskh Arabic",
@@ -34,11 +38,13 @@ FONT_CANDIDATES = [
     "Pacifico", "Lobster", "Dancing Script", "Great Vibes", "Sacramento", "Allura",
     "Satisfy", "Caveat", "Permanent Marker", "Indie Flower","Rabar_013","Roboto Black","Arial"
 ]
+
 MotaghayereBTN = {}
 text = isDB()
 selectDarss = {}
 fontstylelist = {}
 test = []
+
 def find_all_fonts(system_fonts, font_list):
     for font in font_list:
         if font in system_fonts:
@@ -46,6 +52,7 @@ def find_all_fonts(system_fonts, font_list):
     if not test:
         test.append("Arial")
     return test[0]
+
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -64,7 +71,7 @@ class App(CTk):
         except:
             self.code = (self.font_family, 15)
         try:
-            self.code_x2 = (self.font_family, int(fontstylelist["FontCodeSizeX2"][0] or 17))
+            self.code_x2 = (self.font_family, int(fontstylelist["FontCodeSizex2"][0] or 17))
         except:
             self.code_x2 = (self.font_family,17)
         try:
@@ -78,7 +85,7 @@ class App(CTk):
         self.configure(fg_color="#e9edf3")
         self.AyaInFixMishe = []
         self.ctkwindow = []
-        
+        self.ctkcontwindow = []
         if self.current_lang == "English":
             self.text_align = "left"
             self.text_anchor = "nw"
@@ -104,6 +111,12 @@ class App(CTk):
         self.prograse = CTkFrame(self.frame_aval,width=200,fg_color="transparent")
         self.prograse.pack(side=RIGHT,fill="y", anchor="center",padx=100)
         self.prograse.propagate(False)
+
+        self.frameContact = CTkFrame(self.frame_aval,width=70,fg_color="transparent")
+        self.frameContact.pack(side=LEFT,fill="y")
+        self.frameContact.propagate(False)
+        self.btn_contact = CTkButton(self.frameContact,text="👤",width=32,height=32,font=self.code,corner_radius=16,border_spacing=0,anchor="center",fg_color="#1b1f2b",hover_color="#3a6ff0",command=self.contactWindow)
+        self.btn_contact.pack(expand=True,pady=10)
 
         self.emtiaz_label = CTkLabel(self.prograse, text=f"{tables['ui_texts']['YourScore'][self.current_lang]}: 0/{self.totalScore}", font=self.code)
         self.emtiaz_label.pack(side=TOP, anchor="center",pady=5)
@@ -201,9 +214,10 @@ class App(CTk):
         
         for i in tables["ConfigUi"]["PyKeywordsColor"]:
             self.texteditor.tag_config(i,foreground=tables["ConfigUi"]["PyKeywordsColor"][i])
-            
+
         self.texteditor.bind("<KeyRelease>",self.keyframe)
         self.UpdateLabeleScore()
+
     def get_language(self):
         try:
             with open(f"{text}marcodedb.txt", "r", encoding="utf-8") as file:
@@ -298,7 +312,174 @@ class App(CTk):
         self.labelsharehdars3.configure(text="")
         self.ouytput.configure(text="")
         self.khorojizirBG3.configure(text="")
+
+    def contactWindow(self):
+        for i in self.ctkcontwindow:
+            i.destroy()
+        self.ctkcontwindow.clear()
         
+        self.chat_socket = None
+        self.is_server = False
+        self.chat_clients = []
+        self.udp_socket_server = None
+
+        self.con_Wind = CTkToplevel(self)
+        self.ctkcontwindow.append(self.con_Wind)
+        self.con_Wind.geometry("400x500")
+        self.con_Wind.maxsize(370,500)
+        self.con_Wind.minsize(370,500)
+        self.con_Wind.title("Talk")
+        self.con_Wind.attributes("-topmost",True)
+        self.con_Wind.protocol("WM_DELETE_WINDOW", self.close_chat)
+        
+        self.con_frameaval = CTkFrame(self.con_Wind,height=400,corner_radius=0,fg_color="transparent")
+        self.con_frameaval.pack(fill="x")
+        self.con_frameaval.propagate(False)
+        self.con_editbox = CTkTextbox(self.con_frameaval,fg_color="transparent",font=self.code)
+        self.con_editbox.pack(expand=True,fill="both")
+        self.con_editbox.configure(state="disable")
+        self.con_framedovom = CTkFrame(self.con_Wind,corner_radius=0,fg_color="transparent")
+        self.con_framedovom.pack(fill="both")
+        self.con_framedovom.propagate(False)
+
+        self.con_edittext = CTkEntry(self.con_framedovom,width=280,height=20,font=self.code)
+        self.con_edittext.pack(expand=False,side=LEFT,padx=11)
+        self.con_DokmeSendMessage = CTkButton(self.con_framedovom,width=32,height=32,corner_radius=16,border_spacing=0,anchor="center",text="⌯⌲",font=self.code,command=self.sendmessage)
+        self.con_DokmeSendMessage.pack(side=LEFT)
+        self.con_edittext.bind("<Return>",lambda event:self.sendmessage())
+        self.con_edittext.configure(state="disable")
+        self.con_DokmeSendMessage.configure(state="disable")
+        self.showMessage("Searching for network...\n")
+        threading.Thread(target=self.discover_or_host, daemon=True).start()
+    def close_chat(self):
+        try:
+            if self.chat_socket:
+                self.chat_socket.close()
+            if self.udp_socket_server:
+                self.udp_socket_server.close()
+            for c in self.chat_clients:
+                c.close()
+        except:
+            pass
+        self.con_Wind.destroy()
+
+    def discover_or_host(self):
+        udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        udp_socket.settimeout(1.5)
+        try:
+            udp_socket.sendto(b"WHO_IS_SERVER", ("255.255.255.255", 23006))
+            data, addr = udp_socket.recvfrom(1024)
+            if data == b"I_AM_SERVER":
+                udp_socket.close()
+                self.start_client(addr[0])
+                return
+        except:
+            pass
+        udp_socket.close()
+        self.start_server()
+
+    def start_client(self, ip):
+        self.chat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.chat_socket.connect((ip, 23005))
+            self.CleanChat()
+            self.enable_chat_ui(f"Connected to {ip}\n")
+            threading.Thread(target=self.receive_messages, args=(self.chat_socket,), daemon=True).start()
+        except:
+            self.enable_chat_ui("Connection failed.\n")
+
+    def start_server(self):
+        self.is_server = True
+        self.chat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.chat_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            self.chat_socket.bind(("0.0.0.0", 23005))
+            self.chat_socket.listen()
+            self.udp_socket_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.udp_socket_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.udp_socket_server.bind(("0.0.0.0", 23006))
+            threading.Thread(target=self.udp_responder, daemon=True).start()
+            self.CleanChat()
+            self.enable_chat_ui("Started as Server. Waiting for others...\n")
+            while True:
+                client, addr = self.chat_socket.accept()
+                self.chat_clients.append(client)
+                self.showMessage("New user joined\n")
+                threading.Thread(target=self.handle_client, args=(client,), daemon=True).start()
+        except:
+            pass
+    def udp_responder(self):
+        while True:
+            try:
+                data, addr = self.udp_socket_server.recvfrom(1024)
+                if data == b"WHO_IS_SERVER":
+                    self.udp_socket_server.sendto(b"I_AM_SERVER", addr)
+            except:
+                break
+
+    def handle_client(self, client):
+        while True:
+            try:
+                msg = client.recv(1024)
+                if not msg:
+                    break
+                self.showMessage(msg.decode("utf-8") + "\n")
+                for c in self.chat_clients:
+                    if c != client:
+                        try:
+                            c.send(msg)
+                        except:
+                            pass
+            except:
+                break
+        if client in self.chat_clients:
+            self.chat_clients.remove(client)
+        client.close()
+
+    def receive_messages(self, sock):
+        while True:
+            try:
+                msg = sock.recv(1024)
+                if not msg:
+                    break
+                self.showMessage(msg.decode("utf-8") + "\n")
+            except:
+                break
+
+    def enable_chat_ui(self, msg):
+        self.showMessage(msg)
+        self.con_edittext.configure(state="normal")
+        self.con_DokmeSendMessage.configure(state="normal",width=32,height=32,corner_radius=16,border_spacing=0,anchor="center",text="⌯⌲",font=self.code)
+
+    def sendmessage(self):
+        mes_text = self.con_edittext.get()
+        if len(mes_text) > 0:
+            self.con_edittext.delete(0,"end")
+            formatted_msg = f"{getpass.getuser()}: {mes_text}"
+            self.showMessage(f"{formatted_msg}\n")
+            msg_bytes = formatted_msg.encode("utf-8")
+            if self.is_server:
+                for c in self.chat_clients:
+                    try:
+                        c.send(msg_bytes)
+                    except:
+                        pass
+            elif self.chat_socket:
+                try:
+                    self.chat_socket.send(msg_bytes)
+                except:
+                    pass
+
+    def showMessage(self,texts):
+        self.con_editbox.configure(state="normal")
+        self.con_editbox.insert("end",texts)
+        self.con_editbox.see("end")
+        self.con_editbox.configure(state="disable")
+    def CleanChat(self):
+        self.con_editbox.configure(state="normal")
+        self.con_editbox.delete("1.0","end")
+        self.con_editbox.configure(state="disable")
     def UpdateLabeleScore(self):
         score = 0 
         databasee = self.getDbAccept()
@@ -312,6 +493,7 @@ class App(CTk):
             self.emtiaz_label.configure(text=f"{tables['ui_texts']['YourScore'][self.current_lang]}: {score}/{self.totalScore}")
             self.results = score / self.totalScore
             self.prograse_org.set(self.results)
+
     def setDbAccept(self, text2):
         with open(f"{text}marcodedb.txt","a", encoding="utf-8") as file:
             file.write(f"\n{text2} | 1")
@@ -406,6 +588,7 @@ class App(CTk):
                 self.setting_Textbox.pack(side="right",anchor="e",padx=5)
                 self.setting_Textbox.insert(0, f"{y[0]}")
                 self.ok[i] = self.setting_Textbox
+
     def update_font(self):
         for key, textbox in self.ok.items():
             new_value = textbox.get()
@@ -425,6 +608,7 @@ class App(CTk):
                 self.apply_fonts()
         except:
             pass
+
     def apply_fonts(self):
         self.texteditor.configure(font=self.code)
         self.titletext.configure(font=self.code)
@@ -510,6 +694,7 @@ class App(CTk):
                 file.write("FontCodeSizex2 | 17\n")
                 file.write("FontSmall | 13\n")
                 file.write(f"Font | {vales[0]}\n")
+
 if __name__ == "__main__":
     app = App()
     app.mainloop()
